@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<meta name='viewport' content='width=device-width,initial-scale=1'>
+		<meta content='width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0' name='viewport'/>
+		<script src='js/jquery-3.1.1.min.js'></script>
+		<script src='js/bootstrap.min.js'></script>
+		<script src='js/color_thingy.js'></script>
+		<script src='js/xhr.js'></script>
+		<link rel='stylesheet' href='css/bootstrap.min.css'>
+		<style>
+			.container.theme-showcase
+			{
+				margin-top:-24px;
+			}
+
+			.noselect
+			{
+				-webkit-touch-callout:none;
+				-webkit-user-select:none;
+				-khtml-user-select:none;
+				-moz-user-select:none;
+				-ms-user-select:none;
+				user-select:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+
+			.draw_area
+			{
+				cursor:pointer;
+				z-index:1000;
+			}
+
+			.picker
+			{
+				margin:0px;
+				padding:0px;
+				width:60%;
+				height:48px;
+			}
+
+			.sender
+			{
+				margin:0px;
+				margin-top:10px;
+				width:60%;
+				height:48px;
+			}
+		</style>
+		<title>Color Thingy</title>
+	</head>
+	<body role='document'>
+		<div class='container theme-showcase' role='main'>
+			<div class='page-header'>
+				<center>
+					<h1>Live</h1>
+				</center>
+			</div>
+		</div>
+		<center>
+			<canvas id='canvas' class='noselect draw_area'/>
+		</center>
+		<br/>
+		<center>
+			<input type='color' id='picker' class='noselect picker' value='#ff0000'/>
+		</center>
+		<center>
+			<input type='button' id='sender' class='btn btn-primary noselect sender' value='Send'/>
+		</center>
+		<script>
+			var canvas=document.getElementById('canvas');
+			var picker=document.getElementById('picker');
+			var sender=document.getElementById('sender');
+			var color_thingy=new color_thingy_t(canvas,picker,sender);
+		</script>
+	</body>
+</html>
