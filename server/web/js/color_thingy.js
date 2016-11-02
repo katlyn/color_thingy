@@ -71,7 +71,7 @@ color_thingy_t.prototype.calc_canvas=function()
 color_thingy_t.prototype.resize=function()
 {
 	var height=window.innerHeight-this.topbar.offsetHeight-this.controls.offsetHeight;
-	if(height<0)
+	if(height<120)
 		height=window.innerHeight;
 	this.canvas.style.width=this.canvas.style.height=this.canvas.height=this.canvas.width=height;
 	this.controls.style.width=height;

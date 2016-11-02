@@ -188,7 +188,7 @@ if __name__=='__main__':
 		thread=threading.Thread(target=serial_handler)
 		thread.start()
 		Handler=MyHandler
-		server=BaseHTTPServer.HTTPServer(('127.0.0.1',8080),MyHandler)
+		server=BaseHTTPServer.HTTPServer(('0.0.0.0',8080),MyHandler)
 		server.serve_forever()
 	except Exception as error:
 		print('ERROR - '+str(error))
