@@ -19,6 +19,12 @@ serial_mutex=threading.Lock()
 deadman_mutex=threading.Lock()
 main_dead=False
 
+def crc(data):
+	value=0
+	for ii in data:
+		value^=ord(ii)
+	return chr(value)
+
 def list_serial_ports():
 	if sys.platform.startswith('win'):
 		ports=['COM%s'%(ii+1) for ii in range(256)]
@@ -65,7 +71,7 @@ def serial_handler():
 						data=read_serial_data()
 						if not data[0]:
 							continue
-						length=serial_port.write(data[1])
+						length=serial_port.write('az'+data[1]+crc(data[1]))
 						if length==len(data[1]):
 							print('sent data '+str(len(data[1])))
 							clear_serial_data()
@@ -158,6 +164,8 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 						if len(data[yy][xx])!=3:
 							raise Exception('Invalid frame.')
 						for ii in range(0,len(data[yy][xx])):
+							if not isinstance(data[yy][xx][ii],int):
+								raise Exception('Invalid frame.')
 							if data[yy][xx][ii]<0 or data[yy][xx][ii]>255:
 								raise Exception('Invalid frame.')
 							data_bytes+=chr(data[yy][xx][ii])

@@ -7,7 +7,6 @@
 		<script src='js/jquery-3.1.1.min.js'></script>
 		<script src='js/bootstrap.min.js'></script>
 		<script src='js/color_thingy.js'></script>
-		<script src='js/xhr.js'></script>
 		<link rel='stylesheet' href='css/bootstrap.min.css'>
 		<style>
 			.container.theme-showcase
@@ -36,7 +35,7 @@
 			{
 				margin:0px;
 				padding:0px;
-				width:60%;
+				width:100%;
 				height:48px;
 			}
 
@@ -44,14 +43,14 @@
 			{
 				margin:0px;
 				margin-top:10px;
-				width:60%;
+				width:100%;
 				height:48px;
 			}
 		</style>
 		<title>Color Thingy</title>
 	</head>
 	<body role='document'>
-		<div class='container theme-showcase' role='main'>
+		<div id='topbar' class='container theme-showcase' role='main'>
 			<div class='page-header'>
 				<center>
 					<h1>Live</h1>
@@ -61,18 +60,20 @@
 		<center>
 			<canvas id='canvas' class='noselect draw_area'/>
 		</center>
-		<br/>
 		<center>
-			<input type='color' id='picker' class='noselect picker' value='#ff0000'/>
-		</center>
-		<center>
-			<input type='button' id='sender' class='btn btn-primary noselect sender' value='Send'/>
+			<div id='controls'>
+				<br/>
+				<input type='color' id='picker' class='noselect picker' value='#ff0000'/>
+				<input type='button' id='sender' class='btn btn-primary noselect sender' value='Send'/>
+			</div>
 		</center>
 		<script>
+			var topbar=document.getElementById('topbar');
 			var canvas=document.getElementById('canvas');
+			var controls=document.getElementById('controls');
 			var picker=document.getElementById('picker');
 			var sender=document.getElementById('sender');
-			var color_thingy=new color_thingy_t(canvas,picker,sender);
+			var color_thingy=new color_thingy_t(topbar,canvas,controls,picker,sender);
 		</script>
 	</body>
 </html>

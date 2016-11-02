@@ -1,6 +1,8 @@
-function color_thingy_t(canvas,picker,sender)
+function color_thingy_t(topbar,canvas,controls,picker,sender)
 {
+	this.topbar=topbar;
 	this.canvas=canvas;
+	this.controls=controls;
 	this.picker=picker;
 	this.sender=sender;
 	this.ctx=canvas.getContext('2d');
@@ -68,9 +70,11 @@ color_thingy_t.prototype.calc_canvas=function()
 
 color_thingy_t.prototype.resize=function()
 {
-	this.canvas.style.width='60%';
-	this.canvas.style.width=this.canvas.style.height=this.canvas.height=
-		this.canvas.width=this.canvas.offsetWidth;
+	var height=window.innerHeight-this.topbar.offsetHeight-this.controls.offsetHeight;
+	if(height<0)
+		height=window.innerHeight;
+	this.canvas.style.width=this.canvas.style.height=this.canvas.height=this.canvas.width=height;
+	this.controls.style.width=height;
 	this.draw_frame();
 }
 
