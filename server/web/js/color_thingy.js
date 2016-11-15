@@ -31,10 +31,7 @@ function color_thingy_t(topbar,canvas,controls,picker,sender)
 	{
 		if(_this.valid_frame())
 		{
-			_this.xhr(JSON.stringify(_this.frame),function(success)
-			{
-				console.log(success);
-			},
+			_this.xhr(JSON.stringify(_this.frame),null,
 			function(error)
 			{
 				console.log(error);
@@ -161,6 +158,15 @@ color_thingy_t.prototype.draw_frame=function()
 				props.cell_w,props.cell_h);
 			this.ctx.strokeRect(xx*props.cell_w,yy*props.cell_h,
 				props.cell_w,props.cell_h);
+		}
+	var _this=this;
+	if(_this.valid_frame())
+		{
+			_this.xhr(JSON.stringify(_this.frame),null,
+			function(error)
+			{
+				console.log(error);
+			});
 		}
 }
 
