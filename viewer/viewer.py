@@ -16,7 +16,7 @@ def list_serial_ports():
 	if sys.platform.startswith('win'):
 		ports=['COM%s'%(ii+1) for ii in range(256)]
 	elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-		ports=glob.glob('/dev/tty[A-Za-z]*')
+		ports=glob.glob('/dev/ttyUSB*')+glob.glob('/dev/ttyACM*')
 	elif sys.platform.startswith('darwin'):
 		ports=glob.glob('/dev/tty.*')
 	else:
@@ -33,7 +33,7 @@ def list_serial_ports():
 
 def get_frame():
 	try:
-		response=urllib2.urlopen('http://127.0.0.1:8080?get_frame')
+		response=urllib2.urlopen('https://color.nullify.cc/?get_frame')
 		data=json.loads(response.read())
 		data_bytes=''
 		if not data:
