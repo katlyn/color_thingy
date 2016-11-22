@@ -48,7 +48,20 @@ function color_thingy_t(topbar,canvas,controls,picker,sender)
 	this.canvas.addEventListener('mousemove',function(evt){_this.draw(evt);});
 	this.canvas.addEventListener('touchmove',function(evt){_this.draw(evt);});
 
-	this.resize();
+	this.xhr('',function(data)
+	{
+		var old_frame=_this.frame;
+		_this.frame=JSON.parse(data);
+		if(!_this.valid_frame())
+			_this.frame=old_frame;
+		_this.resize();
+	},
+	function(error)
+	{
+		_this.resize();
+		console.log(error);
+	},
+	'GET','?get_frame');
 }
 
 color_thingy_t.prototype.calc_canvas=function()
@@ -161,8 +174,12 @@ color_thingy_t.prototype.draw_frame=function()
 		}
 }
 
-color_thingy_t.prototype.xhr=function(data,onsuccess,onerror)
+color_thingy_t.prototype.xhr=function(data,onsuccess,onerror,method,request)
 {
+	if(!method)
+		method='POST';
+	if(!request)
+		request='';
 	var xmlhttp=new XMLHttpRequest();
 	xmlhttp.onreadystatechange=function()
 	{
@@ -179,6 +196,6 @@ color_thingy_t.prototype.xhr=function(data,onsuccess,onerror)
 			}
 		}
 	};
-	xmlhttp.open('POST','',true);
+	xmlhttp.open(method,request,true);
 	xmlhttp.send(data);
 }
