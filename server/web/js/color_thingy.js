@@ -123,7 +123,7 @@ color_thingy_t.prototype.draw=function(evt)
 
 color_thingy_t.prototype.valid_frame=function()
 {
-	if(this.frame.length!=this.y_cells)
+	if(!this.frame||this.frame.length!=this.y_cells)
 		return false;
 	for(var yy=0;yy<this.y_cells;++yy)
 	{
