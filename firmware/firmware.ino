@@ -3,6 +3,7 @@
   #include <avr/power.h>
 #endif
 
+const bool flipped=true;
 const int grid_width=8;
 const int grid_height=8;
 const int num_line_0=8;
@@ -23,14 +24,17 @@ void init_colors()
     pixels0.begin();
     pixels1.begin();
     for(unsigned int ii=0;ii<grid_width*grid_height;++ii)
-            set_color(ii,255,0,0);
+            set_color(ii,50,0,0);
     update_colors();
 }
 
 void set_color(unsigned int ind,unsigned int rr,unsigned int gg,unsigned int bb)
 {
+    if(flipped)
+        ind=grid_width*grid_height-ind-1;
+
     int new_ind=ind;
-    
+
     if(new_ind>=num_line_0)
         new_ind-=num_line_0;
 
