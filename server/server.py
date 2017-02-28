@@ -8,6 +8,39 @@ import SimpleHTTPServer
 last_frame=None
 frame_height=8
 frame_width=8
+backup_filename='last_frame.json'
+
+def validate_frame(frame):
+	global last_frame
+	global frame_height
+	global frame_width
+	if not isinstance(frame,list):
+		raise Exception('Not a list.')
+	if len(frame)!=frame_height:
+		raise Exception('Invalid frame.')
+	for yy in range(0,len(frame)):
+		if not isinstance(frame[yy],list):
+			raise Exception('Invalid frame.')
+		if len(frame[yy])!=frame_width:
+			raise Exception('Invalid frame.')
+		for xx in range(0,len(frame[yy])):
+			if not isinstance(frame[yy][xx],list):
+				raise Exception('Invalid frame.')
+			if len(frame[yy][xx])!=3:
+				raise Exception('Invalid frame.')
+			for ii in range(0,len(frame[yy][xx])):
+				if not isinstance(frame[yy][xx][ii],int):
+					raise Exception('Invalid frame.')
+				if frame[yy][xx][ii]<0 or frame[yy][xx][ii]>255:
+					raise Exception('Invalid frame.')
+
+def save_backup():
+	global last_frame
+	global backup_filename
+	try:
+		open(backup_filename,'w').write(json.dumps(last_frame))
+	except Exception as error:
+		print('Could not save backup file - '+str(error))
 
 class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	global last_frame
@@ -53,6 +86,7 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		global last_frame
 		global frame_height
 		global frame_width
+		global backup_filename
 		try:
 			data_len=int(self.headers.getheader('content-length',0))
 			if data_len>2e6:
@@ -61,26 +95,9 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 			try:
 				frame=self.rfile.read(data_len)
 				frame=json.loads(frame)
-				if not isinstance(frame,list):
-					raise Exception('Not a list.')
-				if len(frame)!=frame_height:
-					raise Exception('Invalid frame.')
-				for yy in range(0,len(frame)):
-					if not isinstance(frame[yy],list):
-						raise Exception('Invalid frame.')
-					if len(frame[yy])!=frame_width:
-						raise Exception('Invalid frame.')
-					for xx in range(0,len(frame[yy])):
-						if not isinstance(frame[yy][xx],list):
-							raise Exception('Invalid frame.')
-						if len(frame[yy][xx])!=3:
-							raise Exception('Invalid frame.')
-						for ii in range(0,len(frame[yy][xx])):
-							if not isinstance(frame[yy][xx][ii],int):
-								raise Exception('Invalid frame.')
-							if frame[yy][xx][ii]<0 or frame[yy][xx][ii]>255:
-								raise Exception('Invalid frame.')
+				validate_frame(frame)
 				last_frame=frame
+				save_backup()
 			except Exception as error:
 				print(error)
 				self.send_response(400)
@@ -97,6 +114,17 @@ class MyHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 if __name__=='__main__':
 	try:
 		print('Starting color server')
+		try:
+			last_frame=json.loads(open(backup_filename).read())
+			validate_frame(last_frame)
+			print('Loaded backup file "'+backup_filename+'".')
+		except Exception as error:
+			print('Failed to load backup file "'+backup_filename+'".')
+			last_frame=[]
+			for yy in range(0,frame_height):
+				last_frame.append([])
+				for xx in range(0,frame_width):
+					last_frame[yy].append([255,0,0])
 		Handler=MyHandler
 		server=BaseHTTPServer.HTTPServer(('127.0.0.1',8080),MyHandler)
 		server.serve_forever()
