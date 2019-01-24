@@ -33,7 +33,7 @@ def list_serial_ports():
 
 def get_frame():
 	try:
-		response=urllib2.urlopen('https://color.nullify.cc/?get_frame')
+		response=urllib2.urlopen('https://your.web.site/?get_frame')
 		data=json.loads(response.read())
 		data_bytes=''
 		if not data:
