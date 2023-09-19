@@ -1,10 +1,14 @@
 #!/usr/bin/env python2
 import glob
 import json
-import serial
 import sys
 import time
-import urllib2
+import urllib.error
+import urllib.parse
+import urllib.request
+
+import serial
+
 
 def crc(data):
 	value=0
@@ -33,7 +37,7 @@ def list_serial_ports():
 
 def get_frame():
 	try:
-		response=urllib2.urlopen('https://your.web.site/?get_frame')
+		response=urllib.request.urlopen('https://your.web.site/?get_frame')
 		data=json.loads(response.read())
 		data_bytes=''
 		if not data:
@@ -90,3 +94,4 @@ if __name__=='__main__':
 		print('ERROR - '+str(error))
 	except KeyboardInterrupt:
 		exit(1)
+
